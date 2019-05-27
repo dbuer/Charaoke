@@ -1,0 +1,33 @@
+{
+
+  "manifest_version": 2,
+  "name": "Charaoke",
+  "description": "Netflix Karaoke App.",
+  "version": "1.0",
+
+  "browser_action": 
+  {
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "run_at": "document_idle",
+      "js": ["contentScript.js"]
+    }
+  ],
+  
+
+  "background": {
+    "scripts": ["eventHandler.js"],
+    "persistent": false
+  },
+  "web_accessible_resources": ["popup.html"],
+
+  "permissions": [
+    "activeTab",
+    "tabCapture", 
+    "storage",
+    "tabs"
+  ]
+}
