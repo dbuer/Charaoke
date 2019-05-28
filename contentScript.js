@@ -10,6 +10,7 @@ const supportedPages = [netflixContainer, youtubeContainer, hboContainer];
 // Creates the frame and appends it to the DOM
 var iframe = document.createElement('iframe');
 iframe.id = 'charaoke';
+iframe.allow = 'microphone *';
 iframe.style.background = 'black';
 iframe.style.height = '100%';
 iframe.style.width = '0px';

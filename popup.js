@@ -4,13 +4,15 @@ var stopButton;
 var videoPlayer;
 
 // start click
-function startCapture() {
+async function startCapture() {
   disableButtons(true, false);
+  chrome.runtime.sendMessage({task: 'start'});
 }
 
 // stop click
 function stopCapture() {
   disableButtons(false, true);
+  chrome.runtime.sendMessage({task: 'stop'});
 }
 
 // button toggle helper
@@ -21,20 +23,8 @@ function disableButtons(start, stop) {
 
 // listens for messages from eventHandler
 chrome.runtime.onMessage.addListener(function(msg, sender) {
-  if (msg.task == 'toggle') {
-    console.log('tab active')//
-  }
+  
 });
-
-// play given media stream on video object
-function playMediaStream(stream) {
-  videoPlayer.addEventListener('canplay', function() {
-    this.volume = 0.75;
-    this.muted = false;
-    this.play();
-  }); 
-  videoPlayer.srcObject = stream;
-}
 
 // initialize popup menu 
 document.addEventListener('DOMContentLoaded', function() {

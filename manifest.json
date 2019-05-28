@@ -20,12 +20,12 @@
 
   "background": {
     "scripts": ["eventHandler.js"],
-    "persistent": false
+    "persistent": true
   },
   "web_accessible_resources": ["popup.html"],
 
   "permissions": [
-    "activeTab",
+    "<all_urls>",
     "tabCapture", 
     "storage",
     "tabs"
