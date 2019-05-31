@@ -23,7 +23,20 @@ function disableButtons(start, stop) {
 
 // listens for messages from eventHandler
 chrome.runtime.onMessage.addListener(function(msg, sender) {
-  
+
+  if (msg.task == 'perms' && !msg.allow) {
+
+    navigator.mediaDevices.getUserMedia({audio: true})
+    .then(function(stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+      chrome.runtime.sendMessage({task: 'perms', allow: true});
+    })
+    .catch(function(err) {
+      console.log(err.name);
+    });
+
+  }
 });
 
 // initialize popup menu 
