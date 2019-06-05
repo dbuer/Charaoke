@@ -22,27 +22,36 @@ iframe.frameBorder = 'none';
 iframe.src = chrome.runtime.getURL('popup.html');
 document.body.appendChild(iframe);
 
+
+//class=touchable PlayerControls--control-element nfp-button-control default-control-button button-nfplayerSubtitles PlayerControls--control-element--active
+//data-uia="track-subtitle-English"
+
+
 // Receives messages from the extension
 chrome.runtime.onMessage.addListener(function(msg, sender) {
   if (msg.task == 'toggle') {
     toggleView(supportedPages[msg.page]);
+  } else if (msg.task == 'close') {
+  	closeView(supportedPages[0]); // TODO
   }
 });
 
 // Toggles the panel visibility
 function toggleView(page) {
-	var size = window.innerWidth - panelWidth; 	// Width of new video container
-	
 	if (iframe.style.width == '0px') {
-		iframe.style.width = panelWidth.toString() + 'px';
-		setPageSize(page, size.toString() + 'px');
+		openView(page);
 	} else {
-		iframe.style.width = '0px';
-		setPageSize(page, window.innerWidth.toString() + 'px');
+		closeView(page);
 	}
 }
 
-// sets the video width
-function setPageSize(page, size) {
-	page[0].style.width = size;
+function closeView(page) {
+	iframe.style.width = '0px';
+	page[0].style.width = window.innerWidth.toString() + 'px';
+}
+
+function openView(page) {
+	var size = window.innerWidth - panelWidth;
+	iframe.style.width = panelWidth.toString() + 'px';
+	page[0].style.width = size.toString() + 'px';
 }
