@@ -3,14 +3,14 @@ var save = [];
 chrome.browserAction.onClicked.addListener(function(tab) {
 	chrome.tabs.sendMessage(tab.id, {task: 'toggle', page: 0});
 	if (!save[tab.id]) {
-		//checks for microphone permission
-		navigator.permissions.query({name: 'microphone'}).then(function(result) {
-			if (result.state == 'granted') {
+		// checks for microphone permission
+		navigator.permissions.query({name:'microphone'}).then(function(result) {
+			if (result.state == 'granted') { // get the stream if allowed
 				getMediaStreams(tab);
-			} else {
+			} else {						 // ask for permission if denied
 				chrome.tabs.sendMessage(tab.id, {task: 'perms', allow: false});
 			}
-		})
+		});
 	} else {
 		closeMediaStreams(tab);
 	}
@@ -69,6 +69,13 @@ function onStop(event) {
 	stream.chunks = [];
 }
 
+function stopRecording(tab) {
+	let tabRecorder = save[tab.id].tab.recorder;
+	let micRecorder = save[tab.id].mic.recorder;
+	tabRecorder.stop();
+	micRecorder.stop();
+}
+
 // opens all streams and intializes recording object
 async function getMediaStreams(tab) {
 	let audio = new Audio();
@@ -81,7 +88,7 @@ async function getMediaStreams(tab) {
   		media.mic.chunks = [];
   		media.mic.type = 'mic';
   	} catch (err) {
-  		console.error(err);
+  		printError(err);
   	}
 
   	//capture tab audio
@@ -96,7 +103,10 @@ async function getMediaStreams(tab) {
   	});
 }
 
-// closes all open streams
+function printError(error) {
+	console.error(error.name + ': ' + error.message);
+}
+
 function closeMediaStreams(tab) {
 	let tabStream = save[tab.id].tab;
 	let micStream = save[tab.id].mic;
